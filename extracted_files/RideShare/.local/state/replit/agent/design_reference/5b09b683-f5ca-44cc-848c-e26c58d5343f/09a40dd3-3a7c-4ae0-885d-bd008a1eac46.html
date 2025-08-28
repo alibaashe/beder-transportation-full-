@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sombeder Transportation - Your Reliable Ride Partner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                }
+            },
+        }
+    };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --background: hsl(210 40% 98%);
+            --foreground: hsl(222.2 84% 4.9%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(222.2 84% 4.9%);
+            --primary: hsl(174 100% 29%);
+            --primary-foreground: hsl(0 0% 100%);
+            --secondary: hsl(24 95% 53%);
+            --secondary-foreground: hsl(0 0% 100%);
+            --muted: hsl(210 40% 96%);
+            --muted-foreground: hsl(215.4 16.3% 46.9%);
+            --accent: hsl(24 95% 53%);
+            --accent-foreground: hsl(0 0% 100%);
+            --border: hsl(214.3 31.8% 91.4%);
+            --input: hsl(214.3 31.8% 91.4%);
+            --ring: hsl(174 100% 29%);
+            --radius: 12px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .service-card:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s ease;
+        }
+        .modal {
+            display: none;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .bottom-nav-active {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen">
+    <!-- @COMPONENT: MobileApp -->
+    <div class="max-w-sm mx-auto bg-background min-h-screen relative">
+        
+        <!-- @COMPONENT: Header -->
+        <header class="flex items-center justify-between p-4 bg-card shadow-sm">
+            <button class="p-2">
+                <i class="fas fa-bars text-xl text-foreground"></i>
+            </button>
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                    <i class="fas fa-car text-primary-foreground text-sm"></i>
+                </div>
+                <h1 class="text-lg font-semibold text-foreground">Sombeder Service</h1>
+            </div>
+            <button class="p-2 relative">
+                <i class="fas fa-bell text-xl text-foreground"></i>
+                <span class="absolute -top-1 -right-1 w-3 h-3 bg-secondary rounded-full"></span>
+            </button>
+        </header>
+
+        <!-- @COMPONENT: PointsBalanceCard -->
+        <div class="p-4">
+            <div class="bg-gradient-to-r from-primary to-teal-600 text-primary-foreground p-6 rounded-2xl shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm opacity-90">Points Balance</p>
+                        <p class="text-3xl font-bold" data-bind="user.pointsBalance">125.5</p>
+                    </div>
+                    <div class="flex items-center space-x-2 bg-white/20 px-3 py-1 rounded-full">
+                        <i class="fas fa-check-circle text-green-300"></i>
+                        <span class="text-sm font-medium">Verified</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- @COMPONENT: ServicesGrid -->
+        <div class="px-4 pb-4">
+            <h2 class="text-xl font-semibold text-foreground mb-4">Services</h2>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <!-- Row 1 -->
+                <div class="service-card bg-card rounded-2xl p-6 shadow-sm cursor-pointer" onclick="openBookingModal('bajaj')">
+                    <div class="flex flex-col items-center space-y-3">
+                        <!-- Auto-rickshaw/tuk-tuk in urban setting -->
+                        <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Bajaj auto-rickshaw" class="w-16 h-16 rounded-full object-cover" />
+                        <span class="font-medium text-foreground">Bajaj</span>
+                    </div>
+                </div>
+                
+                <div class="service-card bg-card rounded-2xl p-6 shadow-sm cursor-pointer" onclick="openBookingModal('taxi')">
+                    <div class="flex flex-col items-center space-y-3">
+                        <!-- Yellow taxi cab in city -->
+                        <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Taxi cab" class="w-16 h-16 rounded-full object-cover" />
+                        <span class="font-medium text-foreground">Taxi</span>
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="service-card bg-card rounded-2xl p-6 shadow-sm cursor-pointer" onclick="openBookingModal('bus')">
+                    <div class="flex flex-col items-center space-y-3">
+                        <!-- City bus on street -->
+                        <img src="https://images.unsplash.com/photo-1570125909517-53cb21c89ff2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="City bus" class="w-16 h-16 rounded-full object-cover" />
+                        <span class="font-medium text-foreground">Bus</span>
+                    </div>
+                </div>
+
+                <div class="service-card bg-card rounded-2xl p-6 shadow-sm cursor-pointer" onclick="openBookingModal('business')">
+                    <div class="flex flex-col items-center space-y-3">
+                        <!-- Luxury business car -->
+                        <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Business luxury car" class="w-16 h-16 rounded-full object-cover" />
+                        <span class="font-medium text-foreground">Business</span>
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="service-card bg-card rounded-2xl p-6 shadow-sm cursor-pointer" onclick="openBookingModal('delivery')">
+                    <div class="flex flex-col items-center space-y-3">
+                        <!-- Delivery motorcycle with courier -->
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Delivery motorcycle" class="w-16 h-16 rounded-full object-cover" />
+                        <span class="font-medium text-foreground">Delivery</span>
+                    </div>
+                </div>
+
+                <div class="service-card bg-card rounded-2xl p-6 shadow-sm cursor-pointer" onclick="openBookingModal('parcel')">
+                    <div class="flex flex-col items-center space-y-3">
+                        <!-- Delivery person with package -->
+                        <img src="https://images.unsplash.com/photo-1556139943-4bdca53adf1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Parcel delivery person" class="w-16 h-16 rounded-full object-cover" />
+                        <span class="font-medium text-foreground">Parcel</span>
+                    </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="service-card bg-card rounded-2xl p-6 shadow-sm cursor-pointer" onclick="openBookingModal('gas')">
+                    <div class="flex flex-col items-center space-y-3">
+                        <!-- Gas cylinder delivery -->
+                        <img src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Gas cylinder" class="w-16 h-16 rounded-full object-cover" />
+                        <span class="font-medium text-foreground">Gas</span>
+                    </div>
+                </div>
+
+                <div class="service-card bg-card rounded-2xl p-6 shadow-sm cursor-pointer" onclick="openBookingModal('food')">
+                    <div class="flex flex-col items-center space-y-3">
+                        <!-- Food delivery with restaurant meal -->
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Food delivery meal" class="w-16 h-16 rounded-full object-cover" />
+                        <span class="font-medium text-foreground">Food</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Service -->
+            <div class="service-card bg-card rounded-2xl p-6 shadow-sm cursor-pointer mb-6" onclick="openBookingModal('service-cars')">
+                <div class="flex items-center space-x-4">
+                    <!-- Car service/maintenance -->
+                    <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Car service center" class="w-16 h-16 rounded-full object-cover" />
+                    <div>
+                        <h3 class="font-semibold text-foreground">Service Cars</h3>
+                        <p class="text-sm text-muted-foreground">Professional car maintenance</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- @COMPONENT: PromotionCard -->
+        <div class="px-4 pb-6">
+            <div class="bg-gradient-to-r from-accent to-orange-500 text-accent-foreground p-6 rounded-2xl shadow-lg">
+                <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                        <h3 class="text-sm font-medium opacity-90 mb-1">Points Special!</h3>
+                        <h2 class="text-lg font-bold mb-2">Get 5% points off all your rides</h2>
+                        <p class="text-sm opacity-90">Use your points to get discounts on your rides and services.</p>
+                    </div>
+                    <i class="fas fa-gift text-2xl opacity-80"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- @COMPONENT: RecentRides -->
+        <div class="px-4 pb-20">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold text-foreground">Recent Rides</h2>
+                <button class="text-primary text-sm font-medium">View All</button>
+            </div>
+            
+            <!-- @MAP: recentRides.map(ride => ( -->
+            <div class="space-y-3">
+                <div class="bg-card rounded-xl p-4 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-car text-primary"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-foreground" data-bind="ride.destination">Central Market</p>
+                                <p class="text-sm text-muted-foreground" data-bind="ride.date">Today, 2:30 PM</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold text-foreground" data-bind="ride.amount">$12.50</p>
+                            <p class="text-xs text-green-600">Completed</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-card rounded-xl p-4 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-utensils text-secondary"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-foreground" data-bind="ride.destination">Food Delivery</p>
+                                <p class="text-sm text-muted-foreground" data-bind="ride.date">Yesterday, 7:45 PM</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold text-foreground" data-bind="ride.amount">$8.75</p>
+                            <p class="text-xs text-green-600">Delivered</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_MAP )) -->
+        </div>
+
+        <!-- @COMPONENT: BottomNavigation -->
+        <nav class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-card border-t border-border">
+            <div class="flex items-center justify-around py-3">
+                <button class="flex flex-col items-center space-y-1 p-2 bottom-nav-active" data-nav="home">
+                    <i class="fas fa-home text-lg"></i>
+                    <span class="text-xs font-medium">Home</span>
+                </button>
+                <button class="flex flex-col items-center space-y-1 p-2 text-muted-foreground hover:text-primary" data-nav="history">
+                    <i class="fas fa-history text-lg"></i>
+                    <span class="text-xs font-medium">History</span>
+                </button>
+                <button class="flex flex-col items-center space-y-1 p-2 text-muted-foreground hover:text-primary" data-nav="help">
+                    <i class="fas fa-question-circle text-lg"></i>
+                    <span class="text-xs font-medium">Help</span>
+                </button>
+                <button class="flex flex-col items-center space-y-1 p-2 text-muted-foreground hover:text-primary" data-nav="profile">
+                    <i class="fas fa-user text-lg"></i>
+                    <span class="text-xs font-medium">Profile</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+    <!-- @END_COMPONENT: MobileApp -->
+
+    <!-- @COMPONENT: BookingModal -->
+    <div id="bookingModal" class="modal fixed inset-0 bg-black/50 items-center justify-center z-50">
+        <div class="bg-card rounded-t-3xl w-full max-w-sm mx-auto absolute bottom-0 max-h-[80vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 id="modalTitle" class="text-xl font-bold text-foreground">Book Ride</h2>
+                    <button onclick="closeBookingModal()" class="p-2 hover:bg-muted rounded-full">
+                        <i class="fas fa-times text-foreground"></i>
+                    </button>
+                </div>
+
+                <!-- @STATE: selectedService:string = '' -->
+                <div id="modalContent">
+                    <!-- Pickup Location -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-foreground mb-2">Pickup Location</label>
+                        <div class="relative">
+                            <input type="text" placeholder="Enter pickup address" class="w-full p-3 border border-input rounded-xl bg-background focus:ring-2 focus:ring-ring focus:border-transparent">
+                            <i class="fas fa-map-marker-alt absolute right-3 top-3 text-muted-foreground"></i>
+                        </div>
+                    </div>
+
+                    <!-- Destination -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-foreground mb-2">Destination</label>
+                        <div class="relative">
+                            <input type="text" placeholder="Enter destination" class="w-full p-3 border border-input rounded-xl bg-background focus:ring-2 focus:ring-ring focus:border-transparent">
+                            <i class="fas fa-flag absolute right-3 top-3 text-muted-foreground"></i>
+                        </div>
+                    </div>
+
+                    <!-- Service Options -->
+                    <div class="mb-6">
+                        <h3 class="text-sm font-medium text-foreground mb-3">Service Options</h3>
+                        <div class="space-y-2">
+                            <div class="border border-input rounded-xl p-3 cursor-pointer hover:border-primary">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fas fa-clock text-muted-foreground"></i>
+                                        <div>
+                                            <p class="font-medium text-foreground">Now</p>
+                                            <p class="text-sm text-muted-foreground">Immediate pickup</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-primary font-semibold">$15.00</span>
+                                </div>
+                            </div>
+                            <div class="border border-input rounded-xl p-3 cursor-pointer hover:border-primary">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fas fa-calendar text-muted-foreground"></i>
+                                        <div>
+                                            <p class="font-medium text-foreground">Schedule</p>
+                                            <p class="text-sm text-muted-foreground">Pick a time</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-muted-foreground font-semibold">$12.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="mb-6">
+                        <h3 class="text-sm font-medium text-foreground mb-3">Payment Method</h3>
+                        <div class="border border-input rounded-xl p-3">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-credit-card text-primary"></i>
+                                <div>
+                                    <p class="font-medium text-foreground">Points + Card</p>
+                                    <p class="text-sm text-muted-foreground">Use 25 points + $12.25</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-muted-foreground ml-auto"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book Button -->
+                    <button class="w-full bg-primary text-primary-foreground font-semibold py-4 rounded-xl hover:opacity-90 transition-opacity" data-event="click:handleBooking">
+                        <i class="fas fa-car mr-2"></i>
+                        Book Now - $15.00
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: BookingModal -->
+
+    <script>
+    // @FUNCTIONALITY: Modal management for booking different services
+    (function() {
+        const modal = document.getElementById('bookingModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        
+        const serviceDetails = {
+            bajaj: { title: 'Book Bajaj', icon: 'fas fa-motorcycle', basePrice: 8.50 },
+            taxi: { title: 'Book Taxi', icon: 'fas fa-taxi', basePrice: 15.00 },
+            bus: { title: 'Book Bus', icon: 'fas fa-bus', basePrice: 3.50 },
+            business: { title: 'Book Business Ride', icon: 'fas fa-car', basePrice: 25.00 },
+            delivery: { title: 'Schedule Delivery', icon: 'fas fa-motorcycle', basePrice: 12.00 },
+            parcel: { title: 'Send Parcel', icon: 'fas fa-box', basePrice: 10.00 },
+            gas: { title: 'Order Gas', icon: 'fas fa-fire', basePrice: 2.50 },
+            food: { title: 'Order Food', icon: 'fas fa-utensils', basePrice: 5.00 },
+            'service-cars': { title: 'Car Service', icon: 'fas fa-wrench', basePrice: 45.00 }
+        };
+
+        window.openBookingModal = function(serviceType) {
+            const service = serviceDetails[serviceType];
+            if (service) {
+                modalTitle.textContent = service.title;
+                // Update button text and price
+                const bookButton = modalContent.querySelector('button[data-event="click:handleBooking"]');
+                bookButton.innerHTML = `<i class="${service.icon} mr-2"></i>Book Now - $${service.basePrice.toFixed(2)}`;
+                
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        };
+
+        window.closeBookingModal = function() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        };
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeBookingModal();
+            }
+        });
+
+        // Bottom navigation functionality
+        const navButtons = document.querySelectorAll('[data-nav]');
+        navButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                navButtons.forEach(btn => {
+                    btn.classList.remove('bottom-nav-active');
+                    btn.classList.add('text-muted-foreground', 'hover:text-primary');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('bottom-nav-active');
+                this.classList.remove('text-muted-foreground', 'hover:text-primary');
+                
+                // TODO: Implement navigation logic for different sections
+                console.log('Navigating to:', this.dataset.nav);
+            });
+        });
+
+        // TODO: Implement booking logic, form validation, API calls
+        // TODO: Add geolocation for pickup/destination
+        // TODO: Implement real-time price calculation
+        // TODO: Add payment processing integration
+        // TODO: Implement ride tracking and status updates
+    })();
+    </script>
+</body>
+</html>
